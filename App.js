@@ -1,38 +1,46 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Button, TextInput, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, View, Button, TextInput, ScrollView, FlatList, Alert } from 'react-native';
+import Products from './components/Products';
+import AddProduct from './components/AddProduct';
+
 
 export default function App() {
 
-  const [product, setProduct] = useState('');
   const [myProducts, setMyProducts] = useState([]);
-
-  const inputHandler = (val) => {
-    setProduct(val);
-  }
   
-  const submitHandler = () => {
-    const idString = Date.now().toString();
-    setMyProducts(currentMyProduct => [{key: idString, name: product},...currentMyProduct]);
-    setProduct('');
+  const submitHandler = (product) => {
+    if(product.length > 1){
+      const idString = Date.now().toString();
+      setMyProducts(currentMyProduct => [{key: idString, name: product},...currentMyProduct]);
+    }
+    else{
+      Alert.alert('Sorry', 'Product name must be at least 2 characters long.', [
+        {
+          text: "Ok",
+          onPress: () => console.warn("alert closed"),
+          style: "default"
+        }
+      ]);
+    }
+  }
+
+  const deleteProduct = (key) => {
+    setMyProducts(currentMyProduct => {
+      return currentMyProduct.filter(product => product.key!= key);
+    })
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="New product"
-          onChangeText={inputHandler}
-          value={product}
-        />
-        <Button 
-        title="ADD" 
-        onPress={submitHandler}
-        />
-      </View>
+      <AddProduct submitHandler={submitHandler}/>
       <FlatList
         data={myProducts}
-        renderItem={({item}) => <Text style={styles.element}>{item.name}</Text>}
+        renderItem={({item}) => (
+        <Products
+          name={item.name}
+          idString={item.key}
+          deleteProduct={deleteProduct}
+        />)}
       />
     </View>
   );
@@ -43,26 +51,5 @@ const styles = StyleSheet.create({
     padding: 40,
     paddingTop:60,
 
-  },
-  inputContainer: {
-    flexDirection: "row",
-    marginBottom: 20,
-  },
-  inputText: {
-    borderColor: "grey",
-    borderWidth: 1,
-    padding: 5,
-    paddingLeft: 10,
-    fontSize: 18,
-    flexGrow: 1,
-  },
-  items: {
-    marginTop: 10,
-  },
-  element: {
-    fontSize: 17,
-    padding: 5,
-    backgroundColor: "#32cd32",
-    marginVertical: 5,
   }
 });
