@@ -1,10 +1,20 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, TextInput, Button } from 'react-native';
 
 
 const AddProduct = ({submitHandler}) => {
 
     const [product, setProduct] = useState('');
+    const [btnDisable, setBtnDisable] = useState(true);
+
+    useEffect(() => {
+        if(product.length > 1){
+            setBtnDisable(false);
+        }else{
+            setBtnDisable(true);
+        }
+    }, [product])
+
     const inputHandler = (val) => {
         setProduct(val);
     }
@@ -13,6 +23,8 @@ const AddProduct = ({submitHandler}) => {
         submitHandler(product);
         setProduct('');
     };
+
+
 
     return (
         <View style={styles.inputContainer}>
@@ -25,6 +37,7 @@ const AddProduct = ({submitHandler}) => {
             <Button 
                 title="ADD" 
                 onPress={handleClick}
+                disabled={btnDisable}
             />
       </View>
     )
