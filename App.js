@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, FlatList, Modal, Text, Pressable, Button } from 'react-native';
+import { StyleSheet, View, FlatList, Modal, Text, Pressable, Image, ImageBackground } from 'react-native';
 
 import Products from './components/Products';
 import AddProduct from './components/AddProduct';
 import DismissKeyboard from './components/DismissKeyboard';
+import ButtonComponent from './components/ButtonComponent';
 
 
 export default function App() {
@@ -34,7 +35,10 @@ export default function App() {
 
   return (
     <DismissKeyboard>
-      <View style={styles.container}>
+      <ImageBackground 
+      style={styles.container}
+      source={require('./assets/background-1193727_1280.png')}
+      >
 
         <Modal
           visible={modalValidationOpen}
@@ -48,6 +52,7 @@ export default function App() {
                 <Text style={styles.modalHeaderText}>Oups</Text>
               </View>
                 <View style={styles.modalBody}>
+                  <Image source={require('./assets/Red-check-128px.png')} />
                   <Text style={styles.modalBodyText}>Please enter at least 2 characters</Text>
                 </View>
                   <View style={styles.modalFooter}>
@@ -59,10 +64,15 @@ export default function App() {
             </View>
           </View>
         </Modal>
-        <Button
-          title="ADD A PRODUCT"
-          onPress={() => setdisplayModal(true)}
-        />
+        <View style={styles.btnContainer}>
+          <ButtonComponent
+            onPressHandler={() => setdisplayModal(true)}
+            btnTitle="ADD PRODUCT"
+            style={styles.btnAdd}
+          >
+          ADD PRODUCT
+          </ButtonComponent>
+        </View>
 
         <AddProduct 
         submitHandler={submitHandler} 
@@ -78,7 +88,7 @@ export default function App() {
             deleteProduct={deleteProduct}
           />)}
         />
-      </View>
+      </ImageBackground>
     </DismissKeyboard>
   );
 }
@@ -89,6 +99,9 @@ const styles = StyleSheet.create({
     padding: 40,
     paddingTop:60,
   },
+  btnContainer: {
+    borderRadius: 10,
+  },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -98,7 +111,7 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: 'white',
     width: '90%',
-    height: 250,
+    height: 300,
     borderRadius: 15,
     alignItems: 'center',
   },
@@ -142,6 +155,13 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     padding: 16,
+  },
+  btnAdd: {
+    backgroundColor: 'seagreen',
+    marginBottom: 20,
+    borderRadius: 30,
+    borderWidth: 2,
+    borderColor: 'white',
   },
 
 });

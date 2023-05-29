@@ -18,12 +18,15 @@ export default Products;
 
 const styles = StyleSheet.create({
     items: {
-      marginTop: 10,
+        marginTop: 10,
     },
     element: {
-      fontSize: 17,
-      padding: 5,
-      backgroundColor: "#32cd32",
-      marginVertical: 5,
+        fontSize: 17,
+        padding: 5,
+        backgroundColor: "#32cd32",
+        marginVertical: 5,
+        textAlign: "center",
+        borderRadius: 10,
+        color: "white",
     },
 });

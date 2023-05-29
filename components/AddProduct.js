@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, TextInput, Button, Modal } from 'react-native';
+import { StyleSheet, View, TextInput, Button, Modal, Image, ImageBackground } from 'react-native';
+
+import ButtonComponent from '../components/ButtonComponent';
 
 
 const AddProduct = ({submitHandler, displayModal, handleCancel}) => {
@@ -21,25 +23,35 @@ const AddProduct = ({submitHandler, displayModal, handleCancel}) => {
             animationType='slide'
             hardwareAccelerated={true}
         >
-                <View style={styles.inputContainer}>
+                <ImageBackground 
+                style={styles.inputContainer}
+                source={require('../assets/apples-1223772_1280.png')}
+                >
+                    <View style={styles.modalHeaderContainer}>
+                    </View>
                     <TextInput
                         style={styles.inputText}
                         placeholder="New product"
                         onChangeText={inputHandler}
                         value={product}
-                        maxLength={9}
-                            
+                        maxLength={9}    
                     />
-                        <Button 
-                            title="ADD"
-                            onPress={handleClick}
-                        />
-                        <Button
-                            title="CANCEL"
-                            color="red"
-                            onPress={handleCancel}
-                        />
-                </View> 
+                    <View style={styles.btnContainer}>
+                        <ButtonComponent
+                            onPressHandler={handleClick}
+                            style={styles.btnSeagreen}
+                        >
+                        ADD
+                        </ButtonComponent>
+
+                        <ButtonComponent
+                            onPressHandler={handleCancel}
+                            style={styles.btnTomato}
+                        >
+                        CANCEL
+                        </ButtonComponent>
+                    </View>
+                </ImageBackground> 
       </Modal>
 
     )
@@ -55,8 +67,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 24,
     },
-
+    modalHeaderContainer: {
+        alignItems: 'center',
+        marginBottom: 20,
+        justifyContent: 'center',
+    },
     inputText: {
+        backgroundColor: "white",
         borderColor: "grey",
         borderWidth: 1,
         padding: 5,
@@ -64,6 +81,21 @@ const styles = StyleSheet.create({
         fontSize: 18,
         //flexGrow: 1,
         marginBottom: 10,
-        textAlign: "center"
+        textAlign: "center",
+        borderRadius: 10,
+    },
+    btnContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    btnSeagreen: {
+        backgroundColor: 'seagreen',
+        width: 150,
+        borderRadius: 6,
+    },
+    btnTomato: {
+        backgroundColor: 'tomato', 
+        width: 150,
+        borderRadius: 6,
     },
 });
