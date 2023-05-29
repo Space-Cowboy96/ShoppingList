@@ -9,7 +9,7 @@ import DismissKeyboard from './components/DismissKeyboard';
 export default function App() {
 
   const [myProducts, setMyProducts] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalValidationOpen, setmodalValidationOpen] = useState(false);
   const [displayModal, setdisplayModal] = useState(false);
 
   const submitHandler = (product) => {
@@ -18,7 +18,7 @@ export default function App() {
       const idString = Date.now().toString();
       setMyProducts(currentMyProduct => [{key: idString, name: product},...currentMyProduct]);
     }else{
-      setModalOpen(true);
+      setmodalValidationOpen(true);
     }
   }
 
@@ -28,13 +28,17 @@ export default function App() {
     })
   }
 
+  const handleCancel = () => {
+    setdisplayModal(false);
+};
+
   return (
     <DismissKeyboard>
       <View style={styles.container}>
 
         <Modal
-          visible={modalOpen}
-          onRequestClose={() => setModalOpen(false)}
+          visible={modalValidationOpen}
+          onRequestClose={() => setmodalValidationOpen(false)}
           animationType='slide'
           hardwareAccelerated={true}
           transparent={true}>
@@ -48,7 +52,7 @@ export default function App() {
                 </View>
                   <View style={styles.modalFooter}>
                     <Pressable style={styles.pressableBtnModal}
-                    onPress={() => setModalOpen(false)}>
+                    onPress={() => setmodalValidationOpen(false)}>
                       <Text style={styles.modalFooterText}>OK</Text>
                     </Pressable>
                   </View>
@@ -60,7 +64,10 @@ export default function App() {
           onPress={() => setdisplayModal(true)}
         />
 
-        <AddProduct submitHandler={submitHandler} displayModal={displayModal}/>
+        <AddProduct 
+        submitHandler={submitHandler} 
+        displayModal={displayModal} 
+        handleCancel={handleCancel}/>
 
         <FlatList
           data={myProducts}

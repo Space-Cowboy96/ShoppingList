@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { StyleSheet, View, TextInput, Button, Modal } from 'react-native';
 
 
-const AddProduct = ({submitHandler, displayModal}) => {
+const AddProduct = ({submitHandler, displayModal, handleCancel}) => {
 
     const [product, setProduct] = useState('');
 
@@ -31,8 +31,13 @@ const AddProduct = ({submitHandler, displayModal}) => {
                             
                     />
                         <Button 
-                            title="ADD" 
+                            title="ADD"
                             onPress={handleClick}
+                        />
+                        <Button
+                            title="CANCEL"
+                            color="red"
+                            onPress={handleCancel}
                         />
                 </View> 
       </Modal>
