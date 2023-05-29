@@ -1,16 +1,19 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, FlatList, Modal, Text, Pressable } from 'react-native';
+import { StyleSheet, View, FlatList, Modal, Text, Pressable, Button } from 'react-native';
+
 import Products from './components/Products';
 import AddProduct from './components/AddProduct';
+import DismissKeyboard from './components/DismissKeyboard';
 
 
 export default function App() {
 
   const [myProducts, setMyProducts] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-
+  const [displayModal, setdisplayModal] = useState(false);
 
   const submitHandler = (product) => {
+    setdisplayModal(false);
     if(product.length > 1){
       const idString = Date.now().toString();
       setMyProducts(currentMyProduct => [{key: idString, name: product},...currentMyProduct]);
@@ -26,51 +29,58 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
+    <DismissKeyboard>
+      <View style={styles.container}>
 
-      <Modal
-        visible={modalOpen}
-        onRequestClose={() => setModalOpen(false)}
-        animationType='slide'
-        hardwareAccelerated={true}
-        transparent={true}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modelHeaderText}>Oups</Text>
-            </View>
-              <View style={styles.modalBody}>
-                <Text style={styles.modelBodyText}>Please enter at least 2 characters</Text>
+        <Modal
+          visible={modalOpen}
+          onRequestClose={() => setModalOpen(false)}
+          animationType='slide'
+          hardwareAccelerated={true}
+          transparent={true}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalHeaderText}>Oups</Text>
               </View>
-                <View style={styles.modalFooter}>
-                  <Pressable style={styles.pressableBtnModal}
-                  onPress={() => setModalOpen(false)}>
-                    <Text style={styles.modelFooterText}>OK</Text>
-                  </Pressable>
+                <View style={styles.modalBody}>
+                  <Text style={styles.modalBodyText}>Please enter at least 2 characters</Text>
                 </View>
+                  <View style={styles.modalFooter}>
+                    <Pressable style={styles.pressableBtnModal}
+                    onPress={() => setModalOpen(false)}>
+                      <Text style={styles.modalFooterText}>OK</Text>
+                    </Pressable>
+                  </View>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+        <Button
+          title="ADD A PRODUCT"
+          onPress={() => setdisplayModal(true)}
+        />
 
-      <AddProduct submitHandler={submitHandler}/>
-      <FlatList
-        data={myProducts}
-        renderItem={({item}) => (
-        <Products
-          name={item.name}
-          idString={item.key}
-          deleteProduct={deleteProduct}
-        />)}
-      />
-    </View>
+        <AddProduct submitHandler={submitHandler} displayModal={displayModal}/>
+
+        <FlatList
+          data={myProducts}
+          renderItem={({item}) => (
+          <Products
+            name={item.name}
+            idString={item.key}
+            deleteProduct={deleteProduct}
+          />)}
+        />
+      </View>
+    </DismissKeyboard>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,  
     padding: 40,
     paddingTop:60,
-
   },
   modalContainer: {
     flex: 1,
@@ -95,7 +105,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'lightgrey',
   },
-  modelHeaderText: {
+  modalHeaderText: {
     fontSize: 17,
     color: 'black',
   },
@@ -107,7 +117,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  modelBodyText: {
+  modalBodyText: {
     fontSize: 17,
   },
   modalFooter: {
@@ -120,7 +130,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
   },
-  modelFooterText: {
+  modalFooterText: {
     fontSize: 17,
     color: 'white',
     textAlign: 'center',

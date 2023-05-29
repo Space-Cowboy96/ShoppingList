@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, TextInput, Button } from 'react-native';
+import { StyleSheet, View, TextInput, Button, Modal } from 'react-native';
 
 
-const AddProduct = ({submitHandler}) => {
+const AddProduct = ({submitHandler, displayModal}) => {
 
     const [product, setProduct] = useState('');
 
@@ -15,21 +15,28 @@ const AddProduct = ({submitHandler}) => {
         setProduct('');
     };
 
-
-
     return (
-        <View style={styles.inputContainer}>
-            <TextInput
-                style={styles.inputText}
-                placeholder="New product"
-                onChangeText={inputHandler}
-                value={product}
-            />
-            <Button 
-                title="ADD" 
-                onPress={handleClick}
-            />
-      </View>
+        <Modal
+            visible={displayModal}
+            animationType='slide'
+            hardwareAccelerated={true}
+        >
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder="New product"
+                        onChangeText={inputHandler}
+                        value={product}
+                        maxLength={9}
+                            
+                    />
+                        <Button 
+                            title="ADD" 
+                            onPress={handleClick}
+                        />
+                </View> 
+      </Modal>
+
     )
 }
 
@@ -38,8 +45,10 @@ export default AddProduct
 const styles = StyleSheet.create({
 
     inputContainer: {
-        flexDirection: "row",
-        marginBottom: 20,
+        flex: 1,
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        padding: 24,
     },
 
     inputText: {
@@ -48,6 +57,8 @@ const styles = StyleSheet.create({
         padding: 5,
         paddingLeft: 10,
         fontSize: 18,
-        flexGrow: 1,
+        //flexGrow: 1,
+        marginBottom: 10,
+        textAlign: "center"
     },
 });
