@@ -5,13 +5,35 @@ import Products from './components/Products';
 import AddProduct from './components/AddProduct';
 import DismissKeyboard from './components/DismissKeyboard';
 import ButtonComponent from './components/ButtonComponent';
+import Header from './components/Header';
+import Colors from './constants/Colors';
 
+import * as Font from 'expo-font';
+import { AppLoading } from 'expo';
+
+
+const fetchFont = () =>{
+  return Font.loadAsync({
+    'Pacifico': require('./assets/fonts/Pacifico-Regular.ttf'),
+  })
+}
 
 export default function App() {
 
   const [myProducts, setMyProducts] = useState([]);
   const [modalValidationOpen, setmodalValidationOpen] = useState(false);
   const [displayModal, setdisplayModal] = useState(false);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  if(!fontsLoaded){
+    return(
+      <AppLoading
+        startAsync={fetchFont}
+        onFinish={() => setFontsLoaded(true)}
+        onError={() => console.log('error')}
+      />
+    )
+  }
 
   const submitHandler = (product) => {
     setdisplayModal(false);
@@ -36,58 +58,60 @@ export default function App() {
   return (
     <DismissKeyboard>
       <ImageBackground 
-      style={styles.container}
-      source={require('./assets/background-1193727_1280.png')}
+        style={styles.backgroundImg}
+        source={require('./assets/background-1193727_1280.png')}
       >
-
-        <Modal
-          visible={modalValidationOpen}
-          onRequestClose={() => setmodalValidationOpen(false)}
-          animationType='slide'
-          hardwareAccelerated={true}
-          transparent={true}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <View style={styles.modalHeader}>
-                <Text style={styles.modalHeaderText}>Oups</Text>
-              </View>
-                <View style={styles.modalBody}>
-                  <Image source={require('./assets/Red-check-128px.png')} />
-                  <Text style={styles.modalBodyText}>Please enter at least 2 characters</Text>
+        <Header />
+        <View style={styles.container}>
+          <Modal
+            visible={modalValidationOpen}
+            onRequestClose={() => setmodalValidationOpen(false)}
+            animationType='slide'
+            hardwareAccelerated={true}
+            transparent={true}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalHeaderText}>Oups</Text>
                 </View>
-                  <View style={styles.modalFooter}>
-                    <Pressable style={styles.pressableBtnModal}
-                    onPress={() => setmodalValidationOpen(false)}>
-                      <Text style={styles.modalFooterText}>OK</Text>
-                    </Pressable>
+                  <View style={styles.modalBody}>
+                    <Image source={require('./assets/Red-check-128px.png')} />
+                    <Text style={styles.modalBodyText}>Please enter at least 2 characters</Text>
                   </View>
+                    <View style={styles.modalFooter}>
+                      <Pressable style={styles.pressableBtnModal}
+                      onPress={() => setmodalValidationOpen(false)}>
+                        <Text style={styles.modalFooterText}>OK</Text>
+                      </Pressable>
+                    </View>
+              </View>
             </View>
+          </Modal>
+          <View style={styles.btnContainer}>
+            <ButtonComponent
+              onPressHandler={() => setdisplayModal(true)}
+              btnTitle="ADD PRODUCT"
+              style={styles.btnAdd}
+            >
+            ADD PRODUCT
+            </ButtonComponent>
           </View>
-        </Modal>
-        <View style={styles.btnContainer}>
-          <ButtonComponent
-            onPressHandler={() => setdisplayModal(true)}
-            btnTitle="ADD PRODUCT"
-            style={styles.btnAdd}
-          >
-          ADD PRODUCT
-          </ButtonComponent>
+
+          <AddProduct 
+          submitHandler={submitHandler} 
+          displayModal={displayModal} 
+          handleCancel={handleCancel}/>
+
+          <FlatList
+            data={myProducts}
+            renderItem={({item}) => (
+            <Products
+              name={item.name}
+              idString={item.key}
+              deleteProduct={deleteProduct}
+            />)}
+          />
         </View>
-
-        <AddProduct 
-        submitHandler={submitHandler} 
-        displayModal={displayModal} 
-        handleCancel={handleCancel}/>
-
-        <FlatList
-          data={myProducts}
-          renderItem={({item}) => (
-          <Products
-            name={item.name}
-            idString={item.key}
-            deleteProduct={deleteProduct}
-          />)}
-        />
       </ImageBackground>
     </DismissKeyboard>
   );
@@ -97,7 +121,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,  
     padding: 40,
-    paddingTop:60,
   },
   btnContainer: {
     borderRadius: 10,
@@ -109,7 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,.2)',
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: Colors.textColor,
     width: '90%',
     height: 300,
     borderRadius: 15,
@@ -142,26 +165,27 @@ const styles = StyleSheet.create({
   },
   modalFooter: {
     width: '100%',
-    //borderBottomLeftRadius: 15,
-    //borderBottomRightRadius: 15,
   },
   pressableBtnModal: {
-    backgroundColor: 'lightseagreen',
+    backgroundColor: Colors.buttons,
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
   },
   modalFooterText: {
     fontSize: 17,
-    color: 'white',
+    color: Colors.textColor,
     textAlign: 'center',
     padding: 16,
   },
   btnAdd: {
-    backgroundColor: 'seagreen',
+    backgroundColor: Colors.buttons,
     marginBottom: 20,
     borderRadius: 30,
     borderWidth: 2,
     borderColor: 'white',
+  },
+  backgroundImg: {
+    flex: 1,
   },
 
 });

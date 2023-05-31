@@ -1,7 +1,11 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, TextInput, Button, Modal, Image, ImageBackground } from 'react-native';
+import { StyleSheet, View, Modal, ImageBackground } from 'react-native';
 
-import ButtonComponent from '../components/ButtonComponent';
+import * as Font from 'expo-font';
+
+import ButtonComponent from './ButtonComponent';
+import Colors from '../constants/Colors';
+import Input from './Input';
 
 
 const AddProduct = ({submitHandler, displayModal, handleCancel}) => {
@@ -9,7 +13,9 @@ const AddProduct = ({submitHandler, displayModal, handleCancel}) => {
     const [product, setProduct] = useState('');
 
     const inputHandler = (val) => {
-        setProduct(val);
+
+        const regex = /[^a-z]/gi;
+        setProduct(val.replace(regex, '')); // replace all non-alphabetical characters
     }
 
     const handleClick = () => {
@@ -29,17 +35,18 @@ const AddProduct = ({submitHandler, displayModal, handleCancel}) => {
                 >
                     <View style={styles.modalHeaderContainer}>
                     </View>
-                    <TextInput
+
+                    <Input 
                         style={styles.inputText}
-                        placeholder="New product"
-                        onChangeText={inputHandler}
-                        value={product}
-                        maxLength={9}    
+                        textPlaceHolder="New product"
+                        inputValue={product}
+                        inputOnChangeText={inputHandler}
                     />
+
                     <View style={styles.btnContainer}>
                         <ButtonComponent
                             onPressHandler={handleClick}
-                            style={styles.btnSeagreen}
+                            style={styles.btnDarkgreen}
                         >
                         ADD
                         </ButtonComponent>
@@ -73,29 +80,31 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     inputText: {
-        backgroundColor: "white",
-        borderColor: "grey",
-        borderWidth: 1,
-        padding: 5,
-        paddingLeft: 10,
-        fontSize: 18,
-        //flexGrow: 1,
-        marginBottom: 10,
+        backgroundColor: 'white',
+        borderColor: 'lightgrey',
+        padding: 5,        
+        marginBottom: 15,
         textAlign: "center",
-        borderRadius: 10,
+        fontSize: 20,
+        borderRadius: 30,
+        borderWidth: 2,
     },
     btnContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-    btnSeagreen: {
-        backgroundColor: 'seagreen',
-        width: 150,
-        borderRadius: 6,
+    btnDarkgreen: {
+        backgroundColor: Colors.buttons,
+        width: 170,
+        borderRadius: 30,
+        borderWidth: 2,
+        borderColor: 'white',
     },
     btnTomato: {
-        backgroundColor: 'tomato', 
-        width: 150,
-        borderRadius: 6,
+        backgroundColor: Colors.cancel, 
+        width: 170,
+        borderRadius: 30,
+        borderWidth: 2,
+        borderColor: 'white',
     },
 });
