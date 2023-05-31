@@ -4,4 +4,5 @@ export default {
     cancel: 'darkred',
     textColor: 'white',
     inputBox: 'lightgrey',
+    bodyText: 'grey',
 }

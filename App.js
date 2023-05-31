@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, FlatList, Modal, Text, Pressable, Image, ImageBackground } from 'react-native';
+import { StyleSheet, View, FlatList, Modal, Text, Pressable, Image, ImageBackground, SplashScreen } from 'react-native';
 
 import Products from './components/Products';
 import AddProduct from './components/AddProduct';
@@ -8,32 +8,13 @@ import ButtonComponent from './components/ButtonComponent';
 import Header from './components/Header';
 import Colors from './constants/Colors';
 
-import * as Font from 'expo-font';
-import { AppLoading } from 'expo';
-
-
-const fetchFont = () =>{
-  return Font.loadAsync({
-    'Pacifico': require('./assets/fonts/Pacifico-Regular.ttf'),
-  })
-}
 
 export default function App() {
 
   const [myProducts, setMyProducts] = useState([]);
   const [modalValidationOpen, setmodalValidationOpen] = useState(false);
   const [displayModal, setdisplayModal] = useState(false);
-  const [fontsLoaded, setFontsLoaded] = useState(false);
 
-  if(!fontsLoaded){
-    return(
-      <AppLoading
-        startAsync={fetchFont}
-        onFinish={() => setFontsLoaded(true)}
-        onError={() => console.log('error')}
-      />
-    )
-  }
 
   const submitHandler = (product) => {
     setdisplayModal(false);

@@ -6,6 +6,8 @@ import * as Font from 'expo-font';
 import ButtonComponent from './ButtonComponent';
 import Colors from '../constants/Colors';
 import Input from './Input';
+import BodyText from './BodyText';
+import AppStyles from '../constants/AppStyles';
 
 
 const AddProduct = ({submitHandler, displayModal, handleCancel}) => {
@@ -33,6 +35,8 @@ const AddProduct = ({submitHandler, displayModal, handleCancel}) => {
                 style={styles.inputContainer}
                 source={require('../assets/apples-1223772_1280.png')}
                 >
+                <BodyText>Add a product</BodyText>
+
                     <View style={styles.modalHeaderContainer}>
                     </View>
 
